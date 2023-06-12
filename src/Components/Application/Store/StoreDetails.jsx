@@ -265,6 +265,7 @@ const StoreDetails = (props) => {
 
   return (
     <div>
+      <Navbar />
       <div>
         <div className="mx-auto !p-2 h-screen min-vh-100 overflow-auto">
           <div>

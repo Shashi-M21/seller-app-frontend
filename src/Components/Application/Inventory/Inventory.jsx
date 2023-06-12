@@ -7,16 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { getCall } from "../../../Api/axios";
 import useCancellablePromise from "../../../Api/cancelRequest";
 import { isObjEmpty } from "../../../utils/validations";
-import { PRODUCT_CATEGORY } from '../../../utils/constants';
-import { useTheme } from '@mui/material/styles';
+import cogoToast from "cogo-toast";
 
 const columns = [
-  { id: "productName", label: "Product Name", minWidth: 100 },
+  { id: "productName", label: "Name", minWidth: 100 },
   {
     id: "productCategory",
     label: "Category",
     minWidth: 120,
-    format: (value) => PRODUCT_CATEGORY[value] || value,
+    format: (value) => value.toLocaleString("en-US"),
   },
   {
     id: "quantity",
@@ -26,7 +25,7 @@ const columns = [
   },
   {
     id: "purchasePrice",
-    label: "Purchase Price",
+    label: "Purchase price",
     minWidth: 100,
     format: (value) => value.toLocaleString("en-US"),
   },
@@ -46,10 +45,14 @@ const columns = [
     id: "published",
     label: "Published",
   },
+  {
+    id: "images",
+    label: "Images",
+   
+  },
 ];
 
 export default function Inventory() {
-  const theme = useTheme();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -61,6 +64,7 @@ export default function Inventory() {
     try {
       const res = await cancellablePromise(getCall(`/api/v1/products?limit=${rowsPerPage}&offset=${page}`));
       setProducts(res.data);
+      // console.log(res.data);
       setTotalRecords(res.count);
     } catch (error) {
       // cogoToast.error("Something went wrong!");
@@ -104,9 +108,10 @@ export default function Inventory() {
 
   return (
     <>
+      <Navbar />
       <div className="container mx-auto my-8">
         <div className="mb-4 flex flex-row justify-between items-center">
-          <label style={{color: theme.palette.primary.main}} className="font-semibold text-2xl">Inventory</label>
+          <label className="font-semibold text-2xl">Inventory</label>
           <div className="flex">
             <div style={{ marginRight: 15 }}>
               <Button

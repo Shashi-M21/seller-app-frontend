@@ -11,7 +11,7 @@ const userFields = [
   {
     id: "email",
     title: "Email",
-    placeholder: "Enter Admin Email Address",
+    placeholder: "Enter your email address",
     type: "input",
     email: true,
     required: true,
@@ -19,7 +19,7 @@ const userFields = [
   {
     id: "mobile",
     title: "Mobile Number",
-    placeholder: "Enter Admin Mobile Number",
+    placeholder: "Enter your mobile number",
     type: "input",
     mobile: true,
     maxLength: 10,
@@ -28,7 +28,7 @@ const userFields = [
   {
     id: "name",
     title: "Name",
-    placeholder: "Enter Admin Name",
+    placeholder: "Enter provider first name",
     type: "input",
     required: true,
   },
@@ -56,16 +56,13 @@ const InviteAdmin = () => {
     return !Object.values(formErrors).some(val => val !== '')
   }
 
-  const sendInvite = async () => {
+  const sendInvite = () => {
     try {
       const url = `/api/v1/users/invite/admin`;
-      const res = await postCall(url, formValues);
-      if(res){
-        navigate("/application/user-listings");
-        cogoToast.success("Admin created successfully and invitation sent on e-mail");
-      }
+      const res = postCall(url, formValues);
+      navigate("/application/user-listings");
     } catch (error) {
-      cogoToast.error(error.response.data.error);
+      cogoToast.error("Invitation sent");
     }
   };
 

@@ -25,9 +25,8 @@ const StyledTableCell = styled(TableCell)({
 });
 
 const ThreeDotsMenu = (props) => {
-  const { row, isProvider, getAdmins, getProviders, view } = props;
+  const { row, getAdmins, getProviders } = props;
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
 
   const openActionMenu = (e) => {
     e.stopPropagation();
@@ -55,11 +54,8 @@ const ThreeDotsMenu = (props) => {
           break;
       }
       setAnchorEl(null);
-      if(view === "admin"){
-        getAdmins();
-      }else{
-        getProviders();
-      }
+      getAdmins();
+      getProviders();
     } catch (error) {
       console.log(error.response);
     }
@@ -72,7 +68,7 @@ const ThreeDotsMenu = (props) => {
         aria-controls={Boolean(anchorEl) ? 'user-action-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
-        onClick={openActionMenu}
+        onMouseOver={openActionMenu}
         sx={{ width: 30 }}
       >
         <MoreVert />
@@ -87,11 +83,6 @@ const ThreeDotsMenu = (props) => {
           'aria-labelledby': 'user-action-menu-button',
         }}
       >
-        {isProvider && (
-          <MenuItem onClick={() => navigate(`/user-listings/provider-details/${row?.organization?._id}`)}>
-            View
-          </MenuItem>
-        )}
         <MenuItem onClick={(e) => action(e, "enable")}>
           Mark as Active
         </MenuItem>
@@ -120,7 +111,6 @@ const UserTable = (props) => {
     totalRecords,
     handlePageChange,
     handleRowsPerPageChange,
-    view
   } = props;
   const navigate = useNavigate();
 
@@ -142,7 +132,7 @@ const UserTable = (props) => {
               <StyledTableCell
                 key={column.id}
                 align={column.align}
-                style={{ minWidth: column.minWidth, backgroundColor: '#1976d2', color: '#fff' }}
+                style={{ minWidth: column.minWidth }}
               >
                 {column.label}
               </StyledTableCell>
@@ -152,33 +142,25 @@ const UserTable = (props) => {
             {data.map((row, index) => {
                 return (
                   <TableRow
-                    // style={{ cursor: isProvider ? "pointer" : "default" }}
+                    style={{ cursor: isProvider ? "pointer" : "default" }}
                     hover
                     tabIndex={-1}
                     key={index}
+                    onClick={() => {
+                      isProvider &&
+                        navigate(
+                          `/user-listings/provider-details/${row?.organization?._id}`
+                        );
+                    }}
                   >
                     {columns.map((column) => {
                       const value = row[column.id];
                       if (column.id == "Action") {
-                        const user_id = localStorage.getItem("user_id");
-                        if(props.isProvider){
-                          return (
-                            <TableCell key={column.id} align={"left"}>
-                              <ThreeDotsMenu view={view} row={row} isProvider={isProvider} getAdmins={getAdmins} getProviders={getProviders} />
-                            </TableCell>
-                          );  
-                        }else{
-                          if(user_id === row._id){
-                            return <></>
-                          }else{
-                            return (
-                              <TableCell key={column.id} align={"left"}>
-                                <ThreeDotsMenu view={view} row={row} isProvider={isProvider} getAdmins={getAdmins} getProviders={getProviders} />
-                              </TableCell>
-                            );
-                          }
-                        }
-                        
+                        return (
+                          <TableCell onClick={(event) => event.stopPropagation()} key={column.id} align={"left"}>
+                            <ThreeDotsMenu row={row} getAdmins={getAdmins} getProviders={getProviders} />
+                          </TableCell>
+                        );
                       } else if  (column.id == "formatted_status") {
                         return (
                           <TableCell key={column.id} align={column.align}>
@@ -186,12 +168,6 @@ const UserTable = (props) => {
                               <span>{value}</span>
                               {row.bannedUser && <LockOutlined sx={{ color: 'red' }} />}
                             </Stack>
-                          </TableCell>
-                        );
-                      }else if(column.id == "providerName"){
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {row.organization.name}
                           </TableCell>
                         );
                       }

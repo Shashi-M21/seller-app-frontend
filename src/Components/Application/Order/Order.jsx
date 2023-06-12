@@ -4,20 +4,19 @@ import OrderTable from "../Order/OrderTable";
 import { OrderData } from "../../../Constants/OrdersData";
 import useCancellablePromise from "../../../Api/cancelRequest";
 import { getCall } from "../../../Api/axios";
-import { useTheme } from '@mui/material/styles';
 
 const columns = [
   { id: "orderId", label: "Order Id", minWidth: 120, align: "center" },
   {
     id: "createdAt",
-    label: "Created On",
+    label: "Created At",
     minWidth: 180,
     format: (value) => value.toLocaleString("en-US"),
     align: "center",
   },
   {
     id: "updatedAt",
-    label: "Modified On",
+    label: "Updated At",
     minWidth: 180,
     format: (value) => value.toLocaleString("en-US"),
     align: "center",
@@ -31,7 +30,7 @@ const columns = [
   },
   {
     id: "provider_name",
-    label: "Provider Store Name",
+    label: "Provider Name",
     format: (value) => value.toLocaleString("en-US"),
     minWidth: 130,
     align: "center",
@@ -66,26 +65,11 @@ const columns = [
 ];
 
 export default function Orders() {
-  const theme = useTheme();
   const { cancellablePromise } = useCancellablePromise();
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [user, setUser] = useState();
-  const [columnList, setColumnList] = useState(columns);
-  
-  const getUser = async (id) => {
-    const url = `/api/v1/users/${id}`;
-    const res = await getCall(url);
-    setUser(res[0]);
-    return res[0];
-  };
-
-  useEffect(() => {
-    const user_id = localStorage.getItem("user_id");
-    getUser(user_id);
-  }, []);
 
   const getOrders = () => {
     const url = `/api/v1/orders?limit=${rowsPerPage}&offset=${page}`;
@@ -103,21 +87,15 @@ export default function Orders() {
     getOrders();
   }, [page, rowsPerPage]);
 
-  useEffect(() => {
-    if(user && user?.role?.name === "Organization Admin"){
-      const data = columns.filter((item) => item.id !== "provider_name")
-      setColumnList(data);
-    }
-  }, [user]);
-
   return (
     <>
-      <div className="container mx-auto my-8">
+      <Navbar />
+      <div className="container container mx-auto px-4 lg:px-[5rem] my-4">
         <div className="mb-4 flex flex-row justify-between items-center">
-          <label style={{color: theme.palette.primary.main}} className="font-semibold text-2xl">Orders</label>
+          <label className="font-semibold text-2xl">Orders</label>
         </div>
         <OrderTable
-          columns={columnList}
+          columns={columns}
           data={orders}
           totalRecords={totalRecords}
           page={page}

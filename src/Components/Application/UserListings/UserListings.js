@@ -22,7 +22,7 @@ const superAdminCols = [
   },
   {
     id: "mobile",
-    label: "Mobile Number",
+    label: "Mobile",
   },
   {
     id: "formatted_status",
@@ -41,15 +41,11 @@ const providerCols = [
   },
   {
     id: "mobile",
-    label: "Mobile Number",
+    label: "Mobile",
   },
   {
     id: "name",
-    label: "Provider Name",
-  },
-  {
-    id: "providerName",
-    label: "Provider Store Name",
+    label: "Legal name of provider",
   },
   {
     id: "formatted_status",
@@ -102,6 +98,7 @@ const UserListings = () => {
         d["formatted_status"] = d?.enabled ? "Active" : "Inactive";
       });
       setProviders(data);
+      console.log(data);
       setTotalRecords(res.count);
     } catch (error) {
       cogoToast.error(error.response.data.error);
@@ -126,9 +123,11 @@ const UserListings = () => {
 
   return (
     <div>
+      <Navbar />
+
       <div className="container mx-auto my-8">
         <div className="mb-4 flex flex-row justify-between items-center">
-          <label style={{color: theme.palette.primary.main}} className="font-semibold text-2xl">User Listings</label>
+          <label className="font-semibold text-2xl">User Listings</label>
         </div>
 
         <div className="flex flex-row justify-between items-center">
@@ -156,7 +155,6 @@ const UserListings = () => {
         </div>
 
         <UserTable
-          view={view}
           columns={isAdmin ? superAdminCols : providerCols}
           data={isAdmin ? admins : providers}
           isProvider={isAdmin ? false : true}

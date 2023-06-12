@@ -111,6 +111,8 @@ const RenderInput = ({ item, state, stateHandler, onChange, previewOnly }) => {
       </div>
     );
   } else if (item.type == "radio") {
+    // console.log("state[item.id]=====>", state[item.id]);
+    // console.log("item.options=====>", item.options);
     let isDisabled = false;
     if(item.id === "isVegetarian" && state["productCategory"] && state["productCategory"] !== "f_and_b"){
       isDisabled = true;
@@ -126,9 +128,11 @@ const RenderInput = ({ item, state, stateHandler, onChange, previewOnly }) => {
             aria-label={item.id}
             name={item.id}
             value={state[item.id]}
-            onChange={(e) =>
+            onChange={(e) => {
+              console.log("e.target.value=====>", e.target.value);
+              console.log("item.i=====>", item.id);
               stateHandler({ ...state, [item.id]: e.target.value })
-            }
+            }}
             disabled={isDisabled}
           >
             <div className="flex flex-row">
@@ -137,7 +141,7 @@ const RenderInput = ({ item, state, stateHandler, onChange, previewOnly }) => {
                   disabled={item?.isDisabled || isDisabled || previewOnly || false}
                   key={i}
                   value={radioItem.value}
-                  control={<Radio size="small" checked={radioItem.value ===state[item.id]} />}
+                  control={<Radio size="small" checked={radioItem.value === state[item.id]} />}
                   label={
                     <div className="text-sm font-medium text-[#606161]">
                       {radioItem.key}
@@ -528,29 +532,48 @@ const RenderInput = ({ item, state, stateHandler, onChange, previewOnly }) => {
         fileName: file.name.replace(`\.${file_type}`, ""),
         fileType: file_type,
       };
+      console.log('data from rendferutils--->' + data.fileType)
       const res = await postCall(url, data);
       return res;
     };
 
-    const renderUploadedUrls = () => {
-      console.log("state?.tempURL?.[item.id]=====>", state?.tempURL?.[item.id]);
-      if(item?.multiple){
-        if (state?.uploaded_urls) {
-          return state?.uploaded_urls?.map((url) => {
-            return (
-              <img src={url} height={50} width={50} style={{ margin: "10px" }} />
-            );
-          });
-        }
-      }else{
-        if(state?.tempURL?.[item.id] || state[item.id]){
-          return (
-            <img src={state?.tempURL?.[item.id] || state[item.id] || ""} height={50} width={50} style={{ margin: "10px" }} />
-          );
-        }else{
-          return <></>
-        }
+    // const renderUploadedUrls = () => {
+    //   console.log("state?.tempURL?.[item.id]=====>", state?.tempURL?.[item.id]);
+    //   if(item?.multiple){
+    //     if (state?.uploaded_urls) {
+    //       return state?.uploaded_urls?.map((url) => {
+    //         return (
+    //           <img src={url} height={50} width={50} style={{ margin: "10px" }} />
+    //         );
+    //       });
+    //     }
+    //   }else{
+    //     if(state?.tempURL?.[item.id] || state[item.id]){
+    //       return (
+    //         <img src={state?.tempURL?.[item.id] || state[item.id] || ""} height={50} width={50} style={{ margin: "10px" }} />
+    //       );
+    //     }else{
+    //       return <></>
+    //     }
         
+    //   }
+    // };
+    const renderUploadedUrls = () => {
+      console.log("state?.tempURL?.[item.id]=====>", state?.[item.id]);
+      if (state?.images) {
+        console.log(state?.images);
+        return state?.images?.map((url) => {
+          return (
+            <img 
+            src={`https://slio-miscellaneous.s3-accelerate.amazonaws.com/${url}`}
+            height={50} width={50} style={{ margin: "10px" }} />
+          );
+          });
+        
+      }else{
+          return (
+            <img src={`https://slio-miscellaneous.s3-accelerate.amazonaws.com/${state[item.id]}`} height={50} width={50} style={{ margin: "10px" }} />
+          ); 
       }
     };
 
@@ -692,8 +715,7 @@ const RenderInput = ({ item, state, stateHandler, onChange, previewOnly }) => {
                           });
                         };
                         reader.readAsDataURL(file);
-                        
-                        
+                         
                       }
                       response.json();
                     })

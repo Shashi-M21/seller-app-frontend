@@ -17,8 +17,8 @@ code {
 }
 
 ::-webkit-scrollbar {
-  /* width: 2px;
-  height: 2px; */
+  width: 2px;
+  height: 2px;
 }
 
 /* Track */
@@ -85,16 +85,4 @@ code {
 .scrollbar-hidden {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-.MuiAutocomplete-popper{
-  z-index: 11111 !important;
-}
-
-.inputClass{
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.23) !important;
-  padding: 16px 14px !important;
-  border-radius: 10px;
-  line-height: 24px !important;
 }

@@ -58,9 +58,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({ sidebarOpen, setSidebarOpen }) {
+export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -191,8 +193,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
-      {/* <Box sx={{ flexGrow: 1 }}> */}
-        <AppBar position="sticky">
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
           <Toolbar>
             <IconButton
               size="large"
@@ -224,11 +226,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
                 aria-haspopup="true"
                 //  onClick={handleProfileMenuOpen}
                 color="inherit"
-                disabled
               >
-                <AccountCircle
-                  style={{fill: '#fff'}}
-                />
+                <AccountCircle />
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -247,7 +246,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
         </AppBar>
         {renderMobileMenu}
         {renderMenu}
-      {/* </Box> */}
+      </Box>
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
     </>
   );
 }

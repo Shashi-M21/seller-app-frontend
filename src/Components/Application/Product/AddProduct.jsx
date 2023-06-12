@@ -273,6 +273,7 @@ export default function AddProduct() {
 
   const handleSubmit = () => {
     setFormSubmited(true)
+    console.log(state?.productId)
     if (validate()) {
       state?.productId ? updateProduct() : addProduct();
     }

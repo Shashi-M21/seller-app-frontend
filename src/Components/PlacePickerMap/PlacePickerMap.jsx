@@ -14,7 +14,7 @@ export default function MapPointer(props) {
     location,
     setLocation
   } = props
-  const [apiKey, setApiKey] = useState()
+  const [apiKey, setApiKey] = useState('')
   const [map, setMap] = useState()
   const [mapInitialised, setMapInitialised] = useState(false)
   const [script1Loaded, setScript1Loaded] = useState(false)
@@ -23,8 +23,10 @@ export default function MapPointer(props) {
   // fetch MMI API token
   useEffect(() => {
     axios.post('/api/v1/auth/mmi/token').then((res) => {
+      console.log(res)
       setApiKey(res.data.access_token)
     })
+    
   }, [])
 
   const ref = useCallback((node) => {
@@ -60,6 +62,7 @@ export default function MapPointer(props) {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
+     
       <ScriptTag isHydrating={true} type="text/javascript" src={`https://apis.mapmyindia.com/advancedmaps/v1/${apiKey}/map_load?v=1.3`} onLoad={() => setScript1Loaded(true)} />
       <ScriptTag isHydrating={true} type="text/javascript" src={`https://apis.mapmyindia.com/advancedmaps/api/${apiKey}/map_sdk_plugins`} onLoad={() => setScript2Loaded(true)} />
       {script1Loaded && script2Loaded && <div id="map" ref={ref} />}

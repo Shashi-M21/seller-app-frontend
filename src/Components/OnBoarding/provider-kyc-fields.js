@@ -9,22 +9,22 @@ export default [
     {
       id: "address",
       title: "Registered Address",
-      placeholder: "Enter Provider Registered Address",
+      placeholder: "Enter your registered address",
       type: "input",
       required: true,
     },
     {
       id: "contactEmail",
       title: "Email",
-      placeholder: "Enter Provider Email Address",
+      placeholder: "Enter your email address",
       type: "input",
       email: true,
       required: true,
     },
     {
       id: "contactMobile",
-      title: "Mobile Number",
-      placeholder: "Enter Provider Mobile Number",
+      title: "Mobile",
+      placeholder: "Enter your mobile number",
       type: "input",
       mobile: true,
       maxLength: 10,
@@ -33,16 +33,15 @@ export default [
     {
       id: "PAN",
       title: "PAN",
-      placeholder: "Enter Provider PAN",
+      placeholder: "Enter your PAN",
       type: "input",
       maxLength: 10,
       required: true,
-      isUperCase: true
     },
     {
       id: "GSTN",
       title: "GSTIN",
-      placeholder: "Enter Provider GSTIN",
+      placeholder: "Enter your GSTIN",
       type: "input",
       maxLength: 15,
       required: true,
@@ -50,9 +49,9 @@ export default [
     {
       id: "FSSAI",
       title: "FSSAI Number",
-      placeholder: "Enter Provider FSSAI Number",
+      placeholder: "Enter your FSSAI number",
       type: "input",
       maxLength: 14,
-      required: true,
+      required: false,
     },
 ];

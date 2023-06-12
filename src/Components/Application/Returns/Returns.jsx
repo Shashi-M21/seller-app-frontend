@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ReturnOrderTable from "./ReturnOrderTable";
 import { getCall } from "../../../Api/axios";
-import columns from './colDefs';
+import columnDefs from './colDefs'
 import { useTheme } from '@mui/material/styles';
 
 export default function Returns() {
@@ -38,7 +38,7 @@ export default function Returns() {
           <label style={{color: theme.palette.primary.main}} className="font-semibold text-2xl">Returns</label>
         </div>
         <ReturnOrderTable
-          columns={columns}
+          columns={columnDefs}
           data={data}
           totalRecords={totalRecords}
           page={page}
